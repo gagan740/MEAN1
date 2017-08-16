@@ -1,15 +1,18 @@
-var express 		=		require('express');
-var app 				=		express();
-var port 				=		process.env.PORT || 8080;
-var morgan    	=		require('morgan');
-var mongoose		=		require('mongoose');
-var User 				=		require('./app/models/user');
-var bodyParser 	=		require('body-parser');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const express 		=		require('express');
+const app 				=		express();
+const port 				=		process.env.PORT || 8080;
+const morgan    	=		require('morgan');
+const mongoose		=		require('mongoose');
+const bodyParser 	=		require('body-parser');
+const router			=		express.Router();
+const appRoutes		=		require('./app/routes/api')(router);
+const path				=		require('path');
 
 app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/public'))
+app.use('/api',appRoutes);
 
 mongoose.connect('mongodb://localhost:27017/MEAN',(err)=>{
 	if(err){
@@ -19,14 +22,9 @@ mongoose.connect('mongodb://localhost:27017/MEAN',(err)=>{
 	}
 });
 
-app.post('/users',function(req,res){
-	var user 			=	new User();
-	user.username 	=	req.body.username;
-	user.password 	=	req.body.password;
-	user.email		=	req.body.email;
-	user.save();
-	res.send('User creadted.')
-})
+app.get('*', function(req, res){
+		res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
+});
 
 app.listen(port,function(){
 	console.log(`Running the server on port ${port}.`);
