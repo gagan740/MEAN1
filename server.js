@@ -1,12 +1,12 @@
 const express 		=		require('express');
-const app 				=		express();
-const port 				=		process.env.PORT || 8080;
+const app 			=		express();
+const port 			=		process.env.PORT || 8080;
 const morgan    	=		require('morgan');
 const mongoose		=		require('mongoose');
 const bodyParser 	=		require('body-parser');
-const router			=		express.Router();
+const router		=		express.Router();
 const appRoutes		=		require('./app/routes/api')(router);
-const path				=		require('path');
+const path			=		require('path');
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
