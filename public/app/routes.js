@@ -22,8 +22,8 @@
         })
         .when('/login',{
             templateUrl: 'app/views/pages/users/login.html',
-            // controller: 'regCtrl',
-            // controllerAs: 'register'
+            controller: 'mainCtrl',
+            controllerAs: 'main'
         })
         .otherwise({redirectTo: '/'});
 

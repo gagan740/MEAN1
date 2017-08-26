@@ -4,7 +4,11 @@
     angular
         .module('userApp',[
             'appRoutes',
-            'userControllers'
+            'userControllers',
+            'userServices',
+            'ngAnimate',
+            'mainController',
+            'authServices'
         ])
         
 
