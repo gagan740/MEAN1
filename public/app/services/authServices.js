@@ -24,6 +24,13 @@
                 return false;
             }
         }
+        authFactory.getUser     =   () => {
+            if (AuthToken.getToken()) {
+                return $http.post('/api/me');
+            } else {
+                $q.reject({ message: "User has no token." });
+            }
+        }
         authFactory.logout      =   () => {
             AuthToken.setToken();
         }

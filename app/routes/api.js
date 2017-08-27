@@ -1,10 +1,10 @@
 const User 		=	require('../models/user');
 const jwt		=	require('jsonwebtoken');
 const secret	=	'herrypotter';
-module.exports  = (router)=>{
+module.exports  =   (router)=>{
 /////////////////////		USER REGISTRATION ROUTE	////////////////////////////
 
-	router.post('/users',(req,res) => {
+	router.post('/users',(req, res) => {
 		const user 		=		new User();
 		user.username 	=		req.body.username;
 		user.password 	=		req.body.password;
@@ -24,26 +24,51 @@ module.exports  = (router)=>{
 
 /////////////////////		USER LOGIN ROUTE		//////////////////////////////////////
 
-	router.post('/authenticate',(req,res) => {
+	router.post('/authenticate',(req ,res) => {
 		User.findOne({username: req.body.username}).select('email username password').exec((err, user) => {
-			if(err) throw err;
+			if (err) throw err;
 
-			if(!user){
+			if (!user) {
 				res.json({ success: false, message: 'Could not authenticate user.'});
-			}else if(user){
-				if(req.body.password){
+			} else if (user){
+				if (req.body.password) {
 					var validPassword	=	user.comparePassword(req.body.password);
-				}else{
+				} else {
 					res.json({success: false, message: 'No password provided.'})
 				}
-				if(!validPassword){
+				if (!validPassword) {
 					res.json({ success: false, message: 'Could not authenticate password.'});
-				}else{
+				} else {
 					let token = jwt.sign({username: user.username, email: user.email}, secret, { expiresIn: '24h' });
 					res.json({success: true, message: 'User authenticated!', token: token});
 				}
 			}
 		});
 	});
-  return router;
+
+/////////////////////		MIDDLEWARE		/////////////////////////////////////////////////
+
+	router.use((req, res, next) => {
+		let token	=	req.body.token || req.body.query || req.headers['x-access-token'];
+		if (token) {
+			jwt.verify(token, secret, (err, decoded) => {
+				if (err){
+					res.json({ success: false, message: 'Token invalid.' });
+				} else {
+					req.decoded	=	decoded;
+					next();
+				}
+			});
+		} else {
+			res.json({ success: false, message: 'No token provided.'})
+		}
+	});
+
+////////////////////	//////////////////////////////////////
+  
+	router.post('/me',(req, res) => {
+		res.send(req.decoded);
+	});
+
+return router;
 }

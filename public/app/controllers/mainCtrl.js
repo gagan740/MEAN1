@@ -10,7 +10,10 @@
     function mainCtrl($scope, Auth, $timeout, $location, $log) {
         let app             =   this;
         if(Auth.isLoggedIn()){
-            $log.error('Success: User is logged in.')
+            $log.error('Success: User is logged in.');
+            Auth.getUser().then((data) => {
+                $log.warn(data);
+            });
         }else{
             $log.error('Faliure: User in not logged in!');
         }
