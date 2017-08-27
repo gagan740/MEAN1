@@ -10,6 +10,11 @@
             'mainController',
             'authServices'
         ])
+        .config(headerConfig)
+        headerConfig.$inject = ['$httpProvider'];
         
+        function headerConfig($httpProvider) {
+            $httpProvider.interceptors.push('AuthInterceptors');
+        }
 
 }());

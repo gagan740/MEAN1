@@ -5,9 +5,11 @@
         .module('authServices',[])
         .factory('Auth', Auth)
         .factory('AuthToken', AuthToken)
+        .factory('AuthInterceptors', AuthInterceptors)
 
-    Auth.$inject        =   ['$http', 'AuthToken'];
-    AuthToken.$inject   =   ['$window'];
+    Auth.$inject                =   ['$http', 'AuthToken'];
+    AuthToken.$inject           =   ['$window'];
+    AuthInterceptors.$inject    =   ['AuthToken'];
 
     function Auth($http, AuthToken) {
         let authFactory =   {};
@@ -48,5 +50,17 @@
         }
         authTokenFactory.getToken   =   () => $window.localStorage.getItem('token');
         return authTokenFactory;
+    }
+
+    function AuthInterceptors(AuthToken) {
+        let authInterceptorsFactory     =   {};
+        authInterceptorsFactory.request =   (config) => {
+            let token   =   AuthToken.getToken();
+            if(token){
+                config.headers['x-access-token']    =   token;
+            }
+            return config;
+        }
+        return authInterceptorsFactory;
     }
 })();
