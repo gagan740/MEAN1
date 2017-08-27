@@ -22,8 +22,13 @@
         })
         .when('/login',{
             templateUrl: 'app/views/pages/users/login.html',
-            controller: 'mainCtrl',
-            controllerAs: 'main'
+            // controller: 'mainCtrl',
+            // controllerAs: 'main'
+        })
+        .when('/logout',{
+            templateUrl: 'app/views/pages/users/logout.html',
+            // controller: 'mainCtrl',
+            // controllerAs: 'main'
         })
         .otherwise({redirectTo: '/'});
 
