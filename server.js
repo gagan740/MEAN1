@@ -7,6 +7,8 @@ const bodyParser 	=		require('body-parser');
 const router		=		express.Router();
 const appRoutes		=		require('./app/routes/api')(router);
 const path			=		require('path');
+const passport 		= 		require('passport');
+const social		=		require('./app/passport/passport')(app, passport);
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());

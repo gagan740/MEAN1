@@ -30,6 +30,11 @@
             // controller: 'mainCtrl',
             // controllerAs: 'main'
         })
+        .when('/profile',{
+            templateUrl: 'app/views/pages/users/profile.html',
+            // controller: 'mainCtrl',
+            // controllerAs: 'main'
+        })
         .otherwise({redirectTo: '/'});
 
         $locationProvider.html5Mode({ enabled : true, requireBase: false}).hashPrefix('');

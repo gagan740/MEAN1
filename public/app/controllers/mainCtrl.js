@@ -9,17 +9,20 @@
 
     function mainCtrl($scope, Auth, $timeout, $location, $log, $rootScope) {
         var app             =   this;
-
+        app.loadme          =   false;
         $rootScope.$on('$routeChangeStart', () => {
             if(Auth.isLoggedIn()){
-                $log.error('Success: User is logged in.');
-                Auth.getUser().then((data) => {
-                    $log.warn(data);
+                app.isLoggedIn              =   true;
+                Auth.getUser().then((data)  =>  {
                     const {username, email} =   data.data;
                     app.username            =   username;
+                    app.useremail           =   email;
+                    app.loadme              =   true;
                 });
             }else{
-                $log.error('Faliure: User in not logged in!');
+                app.username                =   '';
+                app.isLoggedIn              =   false;
+                app.loadme                  =   true 
             }
         })
         
@@ -33,6 +36,8 @@
                     app.successMsg  =   `${response.data.message} ...Redirecting`;
                     $timeout(() => {
                         $location.path('/about');
+                        app.loginData   =   {};
+                        app.successMsg  =   false;
                     },2000);
                 }else{
                     app.loading =   false;
